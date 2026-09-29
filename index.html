@@ -1,64 +1,66 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Discord Profile</title>
-  <!-- أيقونات FontAwesome لروابط التواصل والموسيقى -->
+
+  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- خلفية متدرجة تحرك الألوان -->
+  <!-- Dynamic Multi-color Animated Background -->
   <div class="animated-bg"></div>
 
-  <!-- مشغل الموسيقى العائم -->
-  <div class="audio-control" id="audio-toggle" title="تشغيل / إيقاف الموسيقى">
-    <i class="fa-solid fa-music music-icon"></i>
-    <span id="audio-status">انقر للتشغيل</span>
-  </div>
-  <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+  <!-- Small Mute / Unmute Floating Button in Corner -->
+  <button id="mute-btn" class="mute-btn" title="Mute / Unmute">
+    <i id="mute-icon" class="fa-solid fa-volume-high"></i>
+  </button>
 
-  <!-- بطاقة البروفايل -->
-  <div class="card">
-    <div id="banner" class="banner"></div>
+  <audio id="bg-music" loop></audio>
 
-    <div class="profile-header">
-      <div class="avatar-wrapper">
+  <!-- Full Page Layout Container -->
+  <main class="page-container">
+    
+    <!-- Top Left Avatar & Status Container -->
+    <div class="header-section">
+      <div class="avatar-container">
         <img id="avatar" class="avatar" src="" alt="Avatar">
         <img id="decoration" class="decoration" src="" alt="Decoration" style="display: none;">
         <div id="status-dot" class="status-dot offline"></div>
       </div>
-    </div>
 
-    <div class="profile-body">
-      <h2 id="display-name">جاري التحميل...</h2>
-      <p id="username" class="username"></p>
-      
-      <!-- الحالة المخصصة -->
-      <div id="custom-status-container" class="custom-status-container" style="display: none;">
-        <span id="custom-status-emoji"></span>
-        <span id="custom-status-text"></span>
-      </div>
-
-      <!-- قسم روابط التواصل الاجتماعي -->
-      <div class="social-links">
-        <a href="https://discord.com" target="_blank" class="social-btn discord" title="Discord">
-          <i class="fa-brands fa-discord"></i>
-        </a>
-        <a href="https://github.com" target="_blank" class="social-btn github" title="GitHub">
-          <i class="fa-brands fa-github"></i>
-        </a>
-        <a href="https://x.com" target="_blank" class="social-btn x-twitter" title="X / Twitter">
-          <i class="fa-brands fa-x-twitter"></i>
-        </a>
-        <a href="https://youtube.com" target="_blank" class="social-btn youtube" title="YouTube">
-          <i class="fa-brands fa-youtube"></i>
-        </a>
+      <div class="user-info">
+        <h1 id="display-name">Loading...</h1>
+        <p id="username" class="username">@discord</p>
       </div>
     </div>
-  </div>
+
+    <!-- Custom Status -->
+    <div id="custom-status-container" class="custom-status-container" style="display: none;">
+      <span id="custom-status-emoji"></span>
+      <span id="custom-status-text"></span>
+    </div>
+
+    <!-- Social Links Section -->
+    <div class="social-links">
+      <a href="https://discord.com" target="_blank" class="social-btn" title="Discord">
+        <i class="fa-brands fa-discord"></i>
+      </a>
+      <a href="https://github.com" target="_blank" class="social-btn" title="GitHub">
+        <i class="fa-brands fa-github"></i>
+      </a>
+      <a href="https://x.com" target="_blank" class="social-btn" title="X / Twitter">
+        <i class="fa-brands fa-x-twitter"></i>
+      </a>
+      <a href="https://youtube.com" target="_blank" class="social-btn" title="YouTube">
+        <i class="fa-brands fa-youtube"></i>
+      </a>
+    </div>
+
+  </main>
 
   <script src="script.js"></script>
 </body>
