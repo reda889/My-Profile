@@ -1,4 +1,130 @@
-const DISCORD_ID = "907591107200827442"; // Replace with your numeric Discord ID
+const DISCORD_ID = "YOUR_DISCORD_ID"; // ضع الـ ID الرقمي الخاص بك هنا
+
+// Music file
+const bgMusic = document.getElementById("bg-music");
+bgMusic.src = "./song.mp3"; // أكتب اسم ملف الأغنية المرفوعة لدكي بأمان
+
+const muteBtn = document.getElementById("mute-btn");
+const muteIcon = document.getElementById("mute-icon");
+
+// Autoplay & Mute Handling
+document.addEventListener("click", () => {
+  if (bgMusic.paused) {
+    bgMusic.play().catch(() => {});
+  }
+}, { once: true });
+
+muteBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (bgMusic.muted || bgMusic.paused) {
+    bgMusic.muted = false;
+    bgMusic.play();
+    muteIcon.className = "fa-solid fa-volume-high";
+  } else {
+    bgMusic.muted = true;
+    muteIcon.className = "fa-solid fa-volume-xmark";
+  }
+});
+
+
+// Lanyard API Fetch
+async function fetchProfileData() {
+  try {
+    const res = await fetch(https://api.lanyard.rest/v1/users/${DISCORD_ID});
+    const json = await res.json();
+    if (json.success && json.data) {
+      updateProfile(json.data);
+    }
+  } catch (err) {
+    console.error("Error fetching REST API:", err);
+  }
+}
+
+function initLanyard() {
+  fetchProfileData();
+
+  const ws = new WebSocket("wss://api.lanyard.rest/socket");
+
+  ws.onopen = () => {
+    ws.send(JSON.stringify({
+      op: 2,
+      d: { subscribe_to_id: DISCORD_ID }
+    }));
+  };
+
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    if (data.t === "INIT_STATE" || data.t === "PRESENCE_UPDATE") {
+      updateProfile(data.d);
+    }
+  };
+
+  ws.onclose = () => setTimeout(initLanyard, 3000);
+}
+
+function updateProfile(userData) {
+  const user = userData.discord_user;
+
+  // 1. Names
+  document.getElementById("display-name").textContent = user.global_name || user.username;
+  document.getElementById("username").textContent = @${user.username};
+
+  // 2. Avatar
+  const avatarUrl = user.avatar
+    ? https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${user.avatar.startsWith('a_') ? 'gif' : 'png'}?size=256
+    : https://cdn.discordapp.com/embed/avatars/0.png;
+  document.getElementById("avatar").src = avatarUrl;
+
+  // 3. Avatar Decoration
+  const decorElem = document.getElementById("decoration");
+  if (user.avatar_decoration_data) {
+    decorElem.src = https://cdn.discordapp.com/avatar-decoration-presets/${user.avatar_decoration_data.asset}.png;
+    decorElem.style.display = "block";
+  } else {
+    decorElem.style.display = "none";
+  }
+
+  // 4. Nameplate Image Check
+  const nameplateBox = document.getElementById("nameplate");
+  const nameplateAsset = user.collectibles?.nameplate?.asset;
+  if (nameplateAsset) {
+    nameplateBox.style.backgroundImage = url('https://cdn.discordapp.com/${nameplateAsset}.png');
+  }
+
+  // 5. Status Dot
+  const statusDot = document.getElementById("status-dot");
+  statusDot.className = status-dot ${userData.discord_status};
+
+  // 6. Bio Check
+  const bioElem = document.getElementById("bio");
+  if (user.bio) {
+    bioElem.textContent = user.bio;
+  } else if (userData.kv && userData.kv.bio) {
+    bioElem.textContent = userData.kv.bio;
+  } else {
+    bioElem.textContent = "No bio available.";
+  }
+
+  // 7. Activity Check (Automatic "No recent activity")
+  const activityElem = document.getElementById("activity-content");
+  
+  // Filtering playing/custom activity
+  const activeGame = userData.activities?.find(a => a.type !== 4); // Game or app
+  const customStatus = userData.activities?.find(a => a.type === 4); // Custom status text
+
+  if (activeGame) {
+    let details = activeGame.name;
+    if (activeGame.details) details +=  - ${activeGame.details};
+    activityElem.textContent = details;
+  } else if (customStatus && (customStatus.state || customStatus.emoji)) {
+    const emoji = customStatus.emoji ? customStatus.emoji.name + " " : "";
+    activityElem.textContent = ${emoji}${customStatus.state || ""};
+  } else {
+    activityElem.textContent = "No recent activity";
+  }
+}
+
+initLanyard(); DISCORD_ID = "907591107200827442"; // Replace with your numeric Discord ID
 
 // 1. Array with 10+ Songs (Add your own links or song files inside songs/ folder)
 const playlist = [
