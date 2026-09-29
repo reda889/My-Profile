@@ -1,45 +1,74 @@
-const DISCORD_ID = "907591107200827442"; // ضَع الـ ID الخاص بك هنا
+const DISCORD_ID = "YOUR_DISCORD_ID"; // Replace with your numeric Discord ID
 
-// --- 1. إدارة تشغيل الصوت ---
+// 1. Array with 10+ Songs (Add your own links or song files inside songs/ folder)
+const playlist = [
+  "https://files.catbox.moe/7x83a0.mp3",
+  "https://files.catbox.moe/391062.mp3",
+  "songs/song1.mp3",
+  "songs/song2.mp3",
+  "songs/song3.mp3",
+  "songs/song4.mp3",
+  "songs/song5.mp3",
+  "songs/song6.mp3",
+  "songs/song7.mp3",
+  "songs/song8.mp3"
+];
+
 const bgMusic = document.getElementById("bg-music");
-const audioToggle = document.getElementById("audio-toggle");
-const audioStatus = document.getElementById("audio-status");
+const muteBtn = document.getElementById("mute-btn");
+const muteIcon = document.getElementById("mute-icon");
 
-let isPlaying = false;
+// Select a random song from array on load
+const randomSong = playlist[Math.floor(Math.random() * playlist.length)];
+bgMusic.src = randomSong;
 
-// تغيير رابط الصوت إلى أغنيتك المفضلة (ضع رابط MP3 مباشر)
-// bgMusic.src = "رابط_الأغنية_المباشر.mp3";
+// Autoplay & Mute Handling
+let isMuted = false;
 
-audioToggle.addEventListener("click", () => {
-  if (isPlaying) {
-    bgMusic.pause();
-    audioStatus.textContent = "تشغيل الموسيقى";
-    audioToggle.querySelector("i").className = "fa-solid fa-music music-icon";
-    isPlaying = false;
-  } else {
+function playAudio() {
+  bgMusic.play().then(() => {
+    isMuted = false;
+    muteIcon.className = "fa-solid fa-volume-high";
+  }).catch(() => {
+    // Browsers block autoplay until user clicks anywhere
+  });
+}
+
+// Play on first user click anywhere on screen
+document.addEventListener("click", () => {
+  if (bgMusic.paused) playAudio();
+}, { once: true });
+
+// Toggle Mute / Unmute Button
+muteBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (bgMusic.muted || bgMusic.paused) {
+    bgMusic.muted = false;
     bgMusic.play();
-    audioStatus.textContent = "إيقاف مؤقت";
-    audioToggle.querySelector("i").className = "fa-solid fa-pause music-icon";
-    isPlaying = true;
+    muteIcon.className = "fa-solid fa-volume-high";
+  } else {
+    bgMusic.muted = true;
+    muteIcon.className = "fa-solid fa-volume-xmark";
   }
 });
 
-// محاولة تشغيل الصوت تلقائياً عند أول تفاعل للمستخدم مع الصفحة
-document.body.addEventListener("click", () => {
-  if (!isPlaying) {
-    bgMusic.play().then(() => {
-      isPlaying = true;
-      audioStatus.textContent = "إيقاف مؤقت";
-      audioToggle.querySelector("i").className = "fa-solid fa-pause music-icon";
-    }).catch(() => {
-      // قيود المتصفح تمنع التشغيل التلقائي الصامت
-    });
+
+// 2. Fetch Discord Data via Lanyard REST + WebSocket
+async function fetchFallbackData() {
+  try {
+    const res = await fetch(https://api.lanyard.rest/v1/users/${DISCORD_ID});
+    const json = await res.json();
+    if (json.success && json.data) {
+      updateProfile(json.data);
+    }
+  } catch (err) {
+    console.error("Error fetching REST API:", err);
   }
-}, { once: true });
+}
 
-
-// --- 2. ربط Lanyard API ---
 function initLanyard() {
+  fetchFallbackData(); // Instant load via REST API
+
   const ws = new WebSocket("wss://api.lanyard.rest/socket");
 
   ws.onopen = () => {
@@ -62,17 +91,17 @@ function initLanyard() {
 function updateProfile(userData) {
   const user = userData.discord_user;
 
-  // الأسماء
+  // Name & Username
   document.getElementById("display-name").textContent = user.global_name || user.username;
   document.getElementById("username").textContent = @${user.username};
 
-  // الصورة الشخصية
+  // Avatar
   const avatarUrl = user.avatar
-    ? https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${user.avatar.startsWith('a_') ? 'gif' : 'png'}?size=256
+    ? https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${user.avatar.startsWith('a_') ? 'gif' : 'png'}?size=512
     : https://cdn.discordapp.com/embed/avatars/0.png;
   document.getElementById("avatar").src = avatarUrl;
 
-  // الديكور
+  // Avatar Decoration
   const decorElem = document.getElementById("decoration");
   if (user.avatar_decoration_data) {
     decorElem.src = https://cdn.discordapp.com/avatar-decoration-presets/${user.avatar_decoration_data.asset}.png;
@@ -81,31 +110,18 @@ function updateProfile(userData) {
     decorElem.style.display = "none";
   }
 
-  // البنر
-  const bannerElem = document.getElementById("banner");
-  if (user.banner) {
-    const bannerUrl = https://cdn.discordapp.com/banners/${user.id}/${user.banner}.${user.banner.startsWith('a_') ? 'gif' : 'png'}?size=512;
-    bannerElem.style.backgroundImage = url('${bannerUrl}');
-  } else if (user.accent_color) {
-    bannerElem.style.backgroundImage = "none";
-    bannerElem.style.backgroundColor = #${user.accent_color.toString(16).padStart(6, '0')};
-  } else {
-    bannerElem.style.backgroundImage = "none";
-    bannerElem.style.backgroundColor = "#c7d2fe";
-  }
-
-  // حالة الاتصال
+  // Status Dot
   const statusDot = document.getElementById("status-dot");
   statusDot.className = status-dot ${userData.discord_status};
 
-  // الحالة المخصصة
+  // Custom Status
   const customActivity = userData.activities?.find(a => a.type === 4);
   const statusContainer = document.getElementById("custom-status-container");
   const statusEmoji = document.getElementById("custom-status-emoji");
   const statusText = document.getElementById("custom-status-text");
 
   if (customActivity && (customActivity.state || customActivity.emoji)) {
-    statusContainer.style.display = "flex";
+    statusContainer.style.display = "inline-flex";
     statusEmoji.textContent = customActivity.emoji ? customActivity.emoji.name : "";
     statusText.textContent = customActivity.state || "";
   } else {
@@ -113,4 +129,5 @@ function updateProfile(userData) {
   }
 }
 
+// Start
 initLanyard();
