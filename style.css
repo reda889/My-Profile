@@ -2,59 +2,118 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'gg sans', 'Noto Sans', system-ui, -apple-system, sans-serif;
 }
 
 body {
-  background-color: #0e0f11;
-  color: #f2f3f5;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-}
-
-.card {
-  width: 330px;
-  background-color: #18191c;
-  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
   position: relative;
 }
 
+/* خلفية سمائية تتغير ألوانها بسلاسة */
+.animated-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #e0f2fe, #bae6fd, #e0e7ff, #f0f9ff);
+  background-size: 400% 400%;
+  animation: skyGradient 12s ease infinite;
+  z-index: -1;
+}
+
+@keyframes skyGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* مشغل الموسيقى العائم */
+.audio-control {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  padding: 10px 16px;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  z-index: 10;
+  font-size: 0.85rem;
+  color: #313338;
+  font-weight: 600;
+}
+
+.audio-control:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.music-icon {
+  color: #5865f2;
+}
+
+/* البطاقة بأسلوب ديسكورد فاتح وناعم */
+.card {
+  width: 340px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(100, 116, 139, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
 .banner {
-  height: 120px;
-  background-color: #2b2d31;
+  height: 125px;
+  background-color: #c7d2fe;
   background-size: cover;
   background-position: center;
 }
 
 .profile-header {
-  padding: 0 16px;
-  margin-top: -45px;
+  padding: 0 20px;
+  margin-top: -50px;
 }
 
 .avatar-wrapper {
   position: relative;
-  width: 90px;
-  height: 90px;
+  width: 96px;
+  height: 96px;
 }
 
 .avatar {
-  width: 80px;
-  height: 80px;
+  width: 84px;
+  height: 84px;
   border-radius: 50%;
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 6px;
+  right: 6px;
   object-fit: cover;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .decoration {
-  width: 96px;
-  height: 96px;
+  width: 102px;
+  height: 102px;
   position: absolute;
   top: -3px;
   right: -3px;
@@ -63,46 +122,77 @@ body {
 }
 
 .status-dot {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  border: 3.5px solid #18191c;
+  border: 4px solid #ffffff;
   position: absolute;
-  bottom: 3px;
-  left: 3px;
+  bottom: 4px;
+  left: 4px;
   z-index: 3;
 }
 
-/* ألوان حالات الاتصال */
+/* ألوان الحالات الناعمة */
 .status-dot.online { background-color: #23a55a; }
 .status-dot.idle { background-color: #f0b232; }
 .status-dot.dnd { background-color: #f23f43; }
 .status-dot.offline { background-color: #80848e; }
 
 .profile-body {
-  padding: 12px 16px 20px;
+  padding: 14px 20px 22px;
 }
 
 .profile-body h2 {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #060607;
 }
 
 .username {
-  font-size: 0.85rem;
-  color: #949ba4;
-  margin-bottom: 10px;
+  font-size: 0.88rem;
+  color: #4e5058;
+  margin-bottom: 12px;
 }
 
 .custom-status-container {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background-color: rgba(255, 255, 255, 0.04);
-  padding: 6px 10px;
-  border-radius: 8px;
+  gap: 8px;
+  background-color: rgba(242, 243, 245, 0.8);
+  padding: 8px 12px;
+  border-radius: 10px;
   font-size: 0.85rem;
-  color: #dbdee1;
-  word-break: break-word;
+  color: #313338;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  margin-bottom: 16px;
+}
+
+/* أزرار التواصل الاجتماعي */
+.social-links {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.social-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #f2f3f5;
+  color: #4e5058;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.social-btn:hover {
+  background: #5865f2;
+  color: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(88, 101, 242, 0.25);
 }
