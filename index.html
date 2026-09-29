@@ -11,56 +11,67 @@
 </head>
 <body>
 
-  <!-- Dynamic Multi-color Animated Background -->
+  <!-- Dynamic Pale Baby Blue Animated Background -->
   <div class="animated-bg"></div>
 
-  <!-- Small Mute / Unmute Floating Button in Corner -->
-  <button id="mute-btn" class="mute-btn" title="Mute / Unmute">
-    <i id="mute-icon" class="fa-solid fa-volume-high"></i>
-  </button>
-
+  <!-- Audio Element -->
   <audio id="bg-music" loop></audio>
 
-  <!-- Full Page Layout Container -->
-  <main class="page-container">
+  <!-- Main Profile Layout -->
+  <main class="profile-container">
     
-    <!-- Top Left Avatar & Status Container -->
-    <div class="header-section">
-      <div class="avatar-container">
+    <!-- Top Header: Avatar + Nameplate Block -->
+    <header class="header-block">
+      <!-- Avatar Section -->
+      <div class="avatar-wrapper">
         <img id="avatar" class="avatar" src="" alt="Avatar">
         <img id="decoration" class="decoration" src="" alt="Decoration" style="display: none;">
         <div id="status-dot" class="status-dot offline"></div>
       </div>
 
-      <div class="user-info">
+      <!-- Nameplate Box -->
+      <div id="nameplate" class="nameplate-box">
         <h1 id="display-name">Loading...</h1>
-        <p id="username" class="username">@discord</p>
+        <span id="username" class="username">@username</span>
       </div>
-    </div>
+    </header>
 
-    <!-- Custom Status -->
-    <div id="custom-status-container" class="custom-status-container" style="display: none;">
-      <span id="custom-status-emoji"></span>
-      <span id="custom-status-text"></span>
-    </div>
+    <!-- Bio Box -->
+    <section class="info-box bio-box">
+      <h2 class="box-title">About Me</h2>
+      <p id="bio">No bio available.</p>
+    </section>
 
-    <!-- Social Links Section -->
-    <div class="social-links">
-      <a href="https://discord.com" target="_blank" class="social-btn" title="Discord">
+    <!-- Activity Box -->
+    <section class="info-box activity-box">
+      <h2 class="box-title">Activity</h2>
+      <div id="activity-content" class="activity-content">
+        No recent activity
+      </div>
+    </section>
+
+    <!-- Social Media Links (No Boxes, Glowing Effect) -->
+    <footer class="social-links">
+      <a href="https://discord.com" target="_blank" class="social-icon" title="Discord">
         <i class="fa-brands fa-discord"></i>
       </a>
-      <a href="https://github.com" target="_blank" class="social-btn" title="GitHub">
+      <a href="https://github.com" target="_blank" class="social-icon" title="GitHub">
         <i class="fa-brands fa-github"></i>
       </a>
-      <a href="https://x.com" target="_blank" class="social-btn" title="X / Twitter">
+      <a href="https://x.com" target="_blank" class="social-icon" title="X / Twitter">
         <i class="fa-brands fa-x-twitter"></i>
       </a>
-      <a href="https://youtube.com" target="_blank" class="social-btn" title="YouTube">
+      <a href="https://youtube.com" target="_blank" class="social-icon" title="YouTube">
         <i class="fa-brands fa-youtube"></i>
       </a>
-    </div>
+    </footer>
 
   </main>
+
+  <!-- Mute Button at Bottom Left -->
+  <button id="mute-btn" class="mute-btn" title="Mute / Unmute">
+    <i id="mute-icon" class="fa-solid fa-volume-high"></i>
+  </button>
 
   <script src="script.js"></script>
 </body>
