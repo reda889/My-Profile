@@ -1,4 +1,4 @@
-const DISCORD_ID = "YOUR_DISCORD_ID"; // Replace with your numeric Discord ID
+const DISCORD_ID = "907591107200827442"; // Replace with your numeric Discord ID
 
 // 1. Array with 10+ Songs (Add your own links or song files inside songs/ folder)
 const playlist = [
