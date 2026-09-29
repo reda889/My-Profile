@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="card">
+    <!-- خلفية البنر -->
+    <div id="banner" class="banner"></div>
+
+    <div class="profile-header">
+      <!-- حاوية الصورة الشخصية + الديكور + حالة الاتصال -->
+      <div class="avatar-wrapper">
+        <img id="avatar" class="avatar" src="" alt="Avatar">
+        <img id="decoration" class="decoration" src="" alt="Decoration" style="display: none;">
+        <div id="status-dot" class="status-dot offline"></div>
+      </div>
+    </div>
+
+    <!-- معلومات الحساب -->
+    <div class="profile-body">
+      <h2 id="display-name">جاري التحميل...</h2>
+      <p id="username" class="username"></p>
+      
+      <div id="custom-status-container" class="custom-status-container" style="display: none;">
+        <span id="custom-status-emoji"></span>
+        <span id="custom-status-text"></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
