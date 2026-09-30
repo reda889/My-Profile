@@ -74,45 +74,44 @@ body {
   flex-direction: column;
   gap: 16px;
 }
+.hero { display: flex; flex-direction: column; align-items: center; gap: 22px; }
 
-.header-block { display: flex; align-items: center; gap: 14px; }
-
-/* ---------- Avatar ---------- */
-.avatar-wrapper {
-  position: relative;
-  width: 96px; height: 96px;
-  flex-shrink: 0;
-}
+/* ---------- Big avatar ---------- */
+.avatar-wrapper { position: relative; width: 190px; height: 190px; }
 .avatar {
-  position: absolute; inset: 8px;
-  width: 80px; height: 80px;
+  position: absolute; inset: 16px;
+  width: 158px; height: 158px;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 6px 20px rgba(56, 100, 160, .3), 0 0 0 3px rgba(255,255,255,.7);
+  box-shadow: 0 10px 30px rgba(56,100,160,.35), 0 0 0 4px rgba(255,255,255,.7);
 }
 .decoration {
   position: absolute; inset: 0;
-  width: 96px; height: 96px;
+  width: 190px; height: 190px;
   pointer-events: none;
   z-index: 2;
 }
-.status-dot {
-  position: absolute; right: 6px; bottom: 6px;
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  border: 4px solid rgba(255,255,255,.95);
-  z-index: 3;
-  box-shadow: 0 2px 8px rgba(0,0,0,.2);
-}
-.status-dot.online  { background: #23a55a; }
-.status-dot.idle    { background: #f0b232; }
-.status-dot.dnd     { background: #f23f43; }
-.status-dot.offline { background: #80848e; }
 
-/* ---------- Nameplate ---------- */
+/* Discord-style status badge */
+.status-dot {
+  position: absolute; right: 12px; bottom: 12px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.95);
+  box-shadow: 0 3px 10px rgba(0,0,0,.22);
+  z-index: 3;
+}
+.status-dot svg { width: 100%; height: 100%; display: block; }
+.status-dot circle { display: none; }
+.status-dot.online  .s-on,
+.status-dot.idle    .s-idle,
+.status-dot.dnd     .s-dnd,
+.status-dot.offline .s-off { display: inline; }
+
+/* ---------- Nameplate row ---------- */
+.plate-row { position: relative; width: 100%; }
 .nameplate-box {
-  flex: 1;
-  min-height: 88px;
+  min-height: 104px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -123,14 +122,24 @@ body {
   object-fit: cover;
   z-index: 0;
 }
-.nameplate-scrim { /* keeps text readable over the moving image */
-  position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(90deg, rgba(255,255,255,.6) 0%, rgba(255,255,255,.2) 55%, rgba(255,255,255,0) 100%);
+.nameplate-box::after { z-index: 1; }
+.nameplate-text { position: relative; z-index: 2; padding: 12px 18px 12px 148px; }
+.nameplate-text h1 {
+  font-size: 1.5rem; font-weight: 800; line-height: 1.2;
+  text-shadow: 0 1px 8px rgba(255,255,255,.65);
 }
-.nameplate-box::after { z-index: 3; }
-.nameplate-text { position: relative; z-index: 2; padding: 12px 18px; }
-.nameplate-text h1 { font-size: 1.5rem; font-weight: 800; line-height: 1.2; }
-.username { display: block; font-size: .78rem; font-weight: 600; color: #475569; margin-top: 2px; }
+.username { display: block; font-size: .8rem; font-weight: 600; color: #334155; margin-top: 2px; text-shadow: 0 1px 6px rgba(255,255,255,.65); }
+
+/* small avatar sits on top of the plate, slightly taller than it */
+.avatar-small {
+  position: absolute; left: 14px; top: 50%;
+  transform: translateY(-50%);
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  z-index: 4;
+  box-shadow: 0 8px 22px rgba(56,100,160,.35), 0 0 0 3px rgba(255,255,255,.8);
+}
 
 /* ---------- Info boxes ---------- */
 .info-box { padding: 16px 20px; }
