@@ -160,10 +160,11 @@ function updateProfile(d) {
   setText("display-name", user.global_name || user.username);
   setText("username", `@${user.username}`);
 
-  const avatar = $("avatar");
-  avatar.src = user.avatar
-    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${user.avatar.startsWith("a_") ? "gif" : "png"}?size=256`
+  const avatarUrl = user.avatar
+    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${user.avatar.startsWith("a_") ? "gif" : "png"}?size=512`
     : "https://cdn.discordapp.com/embed/avatars/0.png";
+  $("avatar").src = avatarUrl;
+  $("avatar-small").src = avatarUrl;
 
   const decor = $("decoration");
   if (user.avatar_decoration_data) {
