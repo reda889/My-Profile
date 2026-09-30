@@ -1,3 +1,32 @@
+/* =====================================================
+   THEME  -  غيّر ألوان الموقع من هذا القسم فقط
+   ===================================================== */
+:root {
+  /* الخلفية المتحركة (5 ألوان تتدرج بينها) */
+  --bg-1: #dbeafe;
+  --bg-2: #e0f2fe;
+  --bg-3: #d9f2e6;
+  --bg-4: #e9e3fb;
+  --bg-5: #bae6fd;
+
+  /* الكتل الضبابية الملونة خلف الزجاج */
+  --blob-1: #7dd3fc;
+  --blob-2: #c4b5fd;
+  --blob-3: #86efac;
+
+  /* شريط Spotify (3 درجات سماوية) */
+  --bar-1: #38bdf8;
+  --bar-2: #7dd3fc;
+  --bar-3: #bae6fd;
+
+  /* لون التفاعل (hover) */
+  --accent: #0284c7;
+
+  /* توهج الأيقونات - RGB (baby blue) */
+  --glow: 137, 207, 240;
+}
+/* ===================================================== */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -18,7 +47,7 @@ body {
 /* ---------- Background ---------- */
 .animated-bg {
   position: fixed; inset: 0; z-index: -3;
-  background: linear-gradient(-45deg, #dbeafe, #e0f2fe, #d9f2e6, #e9e3fb, #bae6fd);
+  background: linear-gradient(-45deg, var(--bg-1), var(--bg-2), var(--bg-3), var(--bg-4), var(--bg-5));
   background-size: 400% 400%;
   animation: shift 16s ease infinite;
 }
@@ -35,9 +64,9 @@ body {
   opacity: .75;
   animation: float 18s ease-in-out infinite;
 }
-.b1 { background: #7dd3fc; top: -60px; left: -80px; }
-.b2 { background: #c4b5fd; top: 38%; right: -110px; animation-delay: -6s; }
-.b3 { background: #86efac; bottom: -90px; left: 15%; animation-delay: -12s; }
+.b1 { background: var(--blob-1); top: -60px; left: -80px; }
+.b2 { background: var(--blob-2); top: 38%; right: -110px; animation-delay: -6s; }
+.b3 { background: var(--blob-3); bottom: -90px; left: 15%; animation-delay: -12s; }
 @keyframes float {
   0%, 100% { transform: translate(0, 0) scale(1); }
   50% { transform: translate(40px, 50px) scale(1.15); }
@@ -169,26 +198,57 @@ body {
 .act-title { font-size: 1.05rem; font-weight: 600; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .act-sub { font-size: .88rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
 .act-bar { height: 8px; border-radius: 8px; background: rgba(100,116,139,.22); overflow: hidden; }
-.act-bar span { display: block; height: 100%; width: 0; background: #5865f2; border-radius: 8px; transition: width 1s linear; }
+.act-bar span {
+  position: relative; display: block; height: 100%; width: 0;
+  border-radius: 8px; overflow: hidden;
+  background: linear-gradient(90deg, var(--bar-1), var(--bar-2), var(--bar-3), var(--bar-2), var(--bar-1));
+  background-size: 200% 100%;
+  animation: bar-flow 4s ease-in-out infinite alternate;
+  transition: width 1s linear;
+}
+.act-bar span::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.8), transparent);
+  transform: translateX(-100%);
+  animation: bar-shine 2.4s ease-in-out infinite;
+}
+@keyframes bar-flow { from { background-position: 0% 0; } to { background-position: 100% 0; } }
+@keyframes bar-shine { to { transform: translateX(100%); } }
 .act-times { display: flex; justify-content: space-between; font-size: .8rem; color: #64748b; margin-top: -6px; }
 .status-line { font-size: .88rem; color: #475569; }
 
 /* ---------- Socials ---------- */
-.social-links { display: flex; justify-content: center; gap: 26px; margin-top: 6px; }
-.social-icon { color: #475569; font-size: 1.6rem; text-decoration: none; transition: all .3s ease; }
-.social-icon:hover { color: #0284c7; transform: translateY(-2px); text-shadow: 0 0 12px rgba(56,189,248,.9), 0 0 20px rgba(14,165,233,.6); }
+.social-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 26px; margin-top: 6px; }
+.social-icon {
+  color: #475569; font-size: 1.7rem; text-decoration: none;
+  filter: drop-shadow(0 0 5px rgba(var(--glow), .55));   /* توهج خفيف دائم */
+  transition: all .3s ease;
+}
+.social-icon:hover {
+  color: var(--accent); transform: translateY(-2px);
+  filter: drop-shadow(0 0 8px rgba(var(--glow), .95)) drop-shadow(0 0 16px rgba(var(--glow), .6));
+}
 
-/* ---------- Mute button ---------- */
+/* ---------- Mute button (headphones, slashed when muted) ---------- */
 .mute-btn {
   position: fixed; bottom: 20px; left: 20px; z-index: 100;
-  width: 44px; height: 44px;
+  width: 46px; height: 46px;
   border-radius: 14px;
-  color: #475569; font-size: 1rem;
+  color: #475569; font-size: 1.1rem;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
 }
-.mute-btn:hover { color: #0284c7; }
+.mute-btn:hover { color: var(--accent); }
+.mute-btn .slash {
+  display: none; position: absolute;
+  width: 28px; height: 3px; border-radius: 3px;
+  background: currentColor;
+  transform: rotate(-45deg);
+  box-shadow: 0 0 0 2px rgba(255,255,255,.85);
+  z-index: 2; pointer-events: none;
+}
+.mute-btn.muted .slash { display: block; }
 
 @media (prefers-reduced-motion: reduce) {
-  .blob, .animated-bg { animation: none; }
-}
+  .blob, .animated-bg, .act-bar span, .act-bar span::after { animation: none; }
+                                           }
