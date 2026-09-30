@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Discord Profile</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -57,18 +57,13 @@
       <div id="activity-content" class="activity-content">No recent activity</div>
     </section>
 
-    <footer class="social-links">
-      <a href="https://discord.com" target="_blank" class="social-icon" title="Discord"><i class="fa-brands fa-discord"></i></a>
-      <a href="https://github.com" target="_blank" class="social-icon" title="GitHub"><i class="fa-brands fa-github"></i></a>
-      <a href="https://x.com" target="_blank" class="social-icon" title="X / Twitter"><i class="fa-brands fa-x-twitter"></i></a>
-      <a href="https://youtube.com" target="_blank" class="social-icon" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-    </footer>
+    <footer id="social-links" class="social-links"></footer>
   </main>
 
-  <button id="mute-btn" class="mute-btn glass" title="Play / Mute">
-    <i id="mute-icon" class="fa-solid fa-volume-xmark"></i>
+  <button id="mute-btn" class="mute-btn glass muted" title="Play / Mute">
+    <i id="mute-icon" class="fa-solid fa-headphones"></i><span class="slash"></span>
   </button>
 
   <script src="script.js"></script>
 </body>
-</html>
+  </html>
