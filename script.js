@@ -5,7 +5,7 @@ const BIO = "";
 
 // ---------- Music ----------
 const bgMusic = document.getElementById("bg-music");
-bgMusic.src = "./song.mp3";
+bgMusic.src = "./song/song1.mp3";
 const muteBtn = document.getElementById("mute-btn");
 const muteIcon = document.getElementById("mute-icon");
 
@@ -102,53 +102,94 @@ function renderNameplate(user) {
   video.onerror = () => {
     video.style.display = "none";
     box.style.backgroundImage = `url('${base}static.png')`;
-    box.style.backgroundSize = "cover";
-    box.style.backgroundPosition = "center";
+    box.style.backgroundSize = "auto 100%"; box.style.backgroundRepeat = "no-repeat";
+    box.style.backgroundPosition = "right center";
   };
 }
 
-// ---------- Activity ----------
-let spotifyTimer = null;
+// ---------- Activity (Discord-style cards) ----------
+let actTimer = null;
+const HEADS = { 0: "Playing", 1: "Streaming", 3: "Watching", 5: "Competing in" };
+
+function fmt(ms) {
+  const s = Math.max(0, Math.floor(ms / 1000));
+  return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+}
+
+function activityImage(a) {
+  const img = a.assets?.large_image;
+  if (!img) return null;
+  if (img.startsWith("mp:")) return `https://media.discordapp.net/${img.slice(3)}`;
+  return a.application_id ? `https://cdn.discordapp.com/app-assets/${a.application_id}/${img}.png` : null;
+}
+
+function headRow(text, iconClass) {
+  const row = h("div", "act-head");
+  row.append(h("span", "", text));
+  if (iconClass) row.append(h("i", iconClass));
+  return row;
+}
+
 function renderActivity(d) {
   const box = $("activity-content");
-  clearInterval(spotifyTimer);
+  clearInterval(actTimer);
   box.replaceChildren();
+  const tickers = [];
 
   // Spotify
   if (d.listening_to_spotify && d.spotify) {
     const sp = d.spotify;
-    const card = h("div", "spotify");
-    const art = h("img"); art.src = sp.album_art_url; art.alt = "";
-    const info = h("div", "spotify-info");
-    info.append(h("div", "t", sp.song), h("div", "a", sp.artist));
-    const bar = h("div", "spotify-bar"); const fill = h("span"); bar.append(fill);
-    info.append(bar);
-    card.append(art, info);
+    const { start, end } = sp.timestamps;
+    const card = h("div", "act-card");
+    const art = h("img", "act-art"); art.src = sp.album_art_url; art.alt = "";
+    const txt = h("div", "act-text");
+    txt.append(h("div", "act-title", sp.song), h("div", "act-sub", sp.artist));
+    const main = h("div", "act-main"); main.append(art, txt);
+    const bar = h("div", "act-bar"); const fill = h("span"); bar.append(fill);
+    const times = h("div", "act-times"); const cur = h("span", "", "00:00");
+    times.append(cur, h("span", "", fmt(end - start)));
+    card.append(headRow("Listening to Spotify", "fa-brands fa-spotify"), main, bar, times);
     box.append(card);
-
-    const tick = () => {
-      const { start, end } = sp.timestamps;
-      const pct = Math.min(100, Math.max(0, ((Date.now() - start) / (end - start)) * 100));
-      fill.style.width = pct + "%";
-    };
-    tick();
-    spotifyTimer = setInterval(tick, 1000);
+    tickers.push(() => {
+      const el = Math.min(Math.max(Date.now() - start, 0), end - start);
+      fill.style.width = (el / (end - start)) * 100 + "%";
+      cur.textContent = fmt(el);
+    });
   }
 
-  // Games / apps (skip custom status type 4 and Spotify type 2)
+  // Games / apps
   (d.activities || []).filter(a => a.type !== 4 && a.type !== 2).forEach(a => {
-    const line = h("div", "status-line");
-    line.textContent = a.name + (a.details ? ` - ${a.details}` : "") + (a.state ? ` (${a.state})` : "");
-    box.append(line);
+    const card = h("div", "act-card");
+    const main = h("div", "act-main");
+    const imgUrl = activityImage(a);
+    if (imgUrl) { const art = h("img", "act-art"); art.src = imgUrl; art.alt = ""; main.append(art); }
+    const txt = h("div", "act-text");
+    txt.append(h("div", "act-title", a.name));
+    if (a.details) txt.append(h("div", "act-sub", a.details));
+    if (a.state) txt.append(h("div", "act-sub", a.state));
+    if (a.timestamps?.start) {
+      const el = h("div", "act-sub", "");
+      txt.append(el);
+      tickers.push(() => { el.textContent = fmt(Date.now() - a.timestamps.start) + " elapsed"; });
+    }
+    main.append(txt);
+    card.append(headRow(HEADS[a.type] || "Playing"), main);
+    box.append(card);
   });
+
+  const hasCards = box.children.length > 0;
+  $("activity-title").style.display = hasCards ? "none" : "";
 
   // Custom status
   const custom = (d.activities || []).find(a => a.type === 4);
   if (custom && (custom.state || custom.emoji)) {
     box.append(h("div", "status-line", `${custom.emoji ? custom.emoji.name + " " : ""}${custom.state || ""}`));
   }
-
   if (!box.children.length) box.textContent = "No recent activity";
+
+  const run = () => tickers.forEach(f => f());
+  run();
+  if (tickers.length) actTimer = setInterval(run, 1000);
 }
 
 // ---------- Main render ----------
