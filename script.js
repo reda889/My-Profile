@@ -7,10 +7,9 @@ const BIO = "";
 // لإضافة موقع: انسخ سطراً وغيّر name و url و icon. للحذف: احذف السطر.
 // أسماء الأيقونات من https://fontawesome.com/search?o=r&m=free&f=brands
 const SOCIALS = [
-  { name: "Discord", url: `https://discord.com/users/${DISCORD_ID}`, icon: "fa-brands fa-discord" },
-  { name: "GitHub",  url: "https://github.com/YOUR_USERNAME",         icon: "fa-brands fa-github" },
-  { name: "X",       url: "https://x.com/YOUR_USERNAME",              icon: "fa-brands fa-x-twitter" },
-  { name: "YouTube", url: "https://youtube.com/@YOUR_CHANNEL",        icon: "fa-brands fa-youtube" },
+  { name: "Discord", url: `https://discord.com/users/${907591107200827442}`, icon: "fa-brands fa-discord" },
+  { name: "tiktok",       url: "https://www.tiktok.com/@gaiseric56",              icon: "fa-brands fa-tiktok" },
+  { name: "YouTube", url: "https://youtube.com/@gaisreic56",        icon: "fa-brands fa-youtube" },
 ];
 
 // ---------- Music ----------
