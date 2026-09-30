@@ -9,7 +9,7 @@ const BIO = "";
 const SOCIALS = [
   { name: "Discord", url: `https://discord.com/users/${907591107200827442}`, icon: "fa-brands fa-discord" },
   { name: "tiktok",       url: "https://www.tiktok.com/@gaiseric56",              icon: "fa-brands fa-tiktok" },
-  { name: "YouTube", url: "https://youtube.com/@gaisreic56",        icon: "fa-brands fa-youtube" },
+  { name: "YouTube", url: "https://youtube.com/@gaiseric56",        icon: "fa-brands fa-youtube" },
 ];
 
 // ---------- Music ----------
