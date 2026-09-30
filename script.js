@@ -3,25 +3,40 @@ const DISCORD_ID = "907591107200827442";
 // اكتب البايو هنا إن أردت (يتقدم على أي مصدر آخر). اتركه فارغاً للجلب التلقائي.
 const BIO = "";
 
+// ---------- روابط التواصل ----------
+// لإضافة موقع: انسخ سطراً وغيّر name و url و icon. للحذف: احذف السطر.
+// أسماء الأيقونات من https://fontawesome.com/search?o=r&m=free&f=brands
+const SOCIALS = [
+  { name: "Discord", url: `https://discord.com/users/${DISCORD_ID}`, icon: "fa-brands fa-discord" },
+  { name: "GitHub",  url: "https://github.com/YOUR_USERNAME",         icon: "fa-brands fa-github" },
+  { name: "X",       url: "https://x.com/YOUR_USERNAME",              icon: "fa-brands fa-x-twitter" },
+  { name: "YouTube", url: "https://youtube.com/@YOUR_CHANNEL",        icon: "fa-brands fa-youtube" },
+];
+
 // ---------- Music ----------
+const MUSIC_FILE = "./song.mp3";   // اسم الملف (على GitHub Pages الحروف الكبيرة/الصغيرة تفرق)
 const bgMusic = document.getElementById("bg-music");
-bgMusic.src = "./song/song1.mp3";
 const muteBtn = document.getElementById("mute-btn");
-const muteIcon = document.getElementById("mute-icon");
+bgMusic.src = MUSIC_FILE;
+bgMusic.volume = 0.6;
+bgMusic.addEventListener("error", () =>
+  console.error("Music failed to load:", MUSIC_FILE, "- تأكد أن الملف مرفوع وأن اسمه مطابق تماماً"));
 
-function syncIcon() {
-  muteIcon.className = (bgMusic.paused || bgMusic.muted)
-    ? "fa-solid fa-volume-xmark"
-    : "fa-solid fa-volume-high";
-}
+function syncIcon() { muteBtn.classList.toggle("muted", bgMusic.paused || bgMusic.muted); }
 ["play", "pause", "volumechange"].forEach(ev => bgMusic.addEventListener(ev, syncIcon));
+syncIcon();
 
-document.addEventListener("click", () => {
-  if (bgMusic.paused) bgMusic.play().catch(() => {});
-}, { once: true });
+// المتصفحات تمنع التشغيل التلقائي حتى أول لمس/نقر
+function unlockAudio(e) {
+  if (muteBtn.contains(e.target)) return;
+  bgMusic.play().then(() => {
+    ["click", "touchend", "keydown"].forEach(t => document.removeEventListener(t, unlockAudio));
+  }).catch(() => {});
+}
+["click", "touchend", "keydown"].forEach(t => document.addEventListener(t, unlockAudio));
+bgMusic.play().catch(() => {});
 
-muteBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
+muteBtn.addEventListener("click", () => {
   if (bgMusic.paused) { bgMusic.muted = false; bgMusic.play().catch(() => {}); }
   else bgMusic.muted = !bgMusic.muted;
 });
@@ -223,6 +238,18 @@ function updateProfile(d) {
   renderActivity(d);
 }
 
+function renderSocials() {
+  const box = $("social-links");
+  SOCIALS.forEach(s => {
+    const a = h("a", "social-icon");
+    a.href = s.url; a.target = "_blank"; a.rel = "noopener";
+    a.title = s.name; a.setAttribute("aria-label", s.name);
+    a.append(h("i", s.icon));
+    box.append(a);
+  });
+}
+
+renderSocials();
 fetchProfileData();
 connectSocket();
 fetchExternalBio();
